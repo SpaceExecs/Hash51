@@ -1,18 +1,18 @@
-import React, {useContext, useState} from 'react';
+import React, { useContext, useState } from 'react';
 
 import {
   Input,
   Button,
   InputGroup,
   InputRightElement,
-  Flex
-} from "@chakra-ui/react";
+  Flex,
+} from '@chakra-ui/react';
 
 import { EvidenceContext } from '../../../contexts/EvidenceContext';
 
 const Search = () => {
   const { fetchSearch } = useContext(EvidenceContext);
-  const [value, setValue] = useState("");
+  const [value, setValue] = useState('');
   const handleChange = (event) => setValue(event.target.value);
 
   return (
@@ -28,9 +28,9 @@ const Search = () => {
           onChange={handleChange}
         />
         <InputRightElement width="4.5rem">
-          <Button 
-            h="1.75rem" 
-            size="sm" 
+          <Button
+            h="1.75rem"
+            size="sm"
             onClick={() => fetchSearch(value)}
             colorScheme="green"
           >
@@ -41,6 +41,5 @@ const Search = () => {
     </Flex>
   );
 };
-
 
 export default Search;

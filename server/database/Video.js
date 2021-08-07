@@ -4,8 +4,8 @@ const VideoSchema = new mongoose.Schema({
   title: String,
   channelTitle: String,
   description: String,
-  videoId: String,
-  url: String,
+  video: String,
+  thumbnail: String,
 });
 
 const Video = mongoose.model('Video', VideoSchema);

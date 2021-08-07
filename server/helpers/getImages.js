@@ -12,7 +12,7 @@ const getImagesFromNasa = (query) => {
 
   return axios(options)
     .then((response) => response)
-    .catch((error) =>{
+    .catch((error) => {
       console.log(error);
     });
 };
@@ -27,7 +27,7 @@ const nasaIdCall = (nasaId) => {
 
   return axios(options)
     .then((response) => response)
-    .catch((error) =>{
+    .catch((error) => {
       console.log(error);
     });
 };

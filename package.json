@@ -6,7 +6,6 @@
   "scripts": {
     "start": "nodemon server",
     "dev": "webpack",
-    "test": "echo \"Error: no test specified\" && exit 1",
     "build:prod": "webpack --config webpack.config.js --mode production",
     "restart": "pm2 startOrRestart ecosystem.config.js --env production",
     "deploy": "pm2 deploy ecosystem.config.js production",
@@ -18,12 +17,12 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/DDR-Greenfield/Hash51-2.0"
+    "url": "git+https://github.com/DDR-Greenfield/Hash51-2.0.git"
   },
   "author": "",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/DDR-Greenfield/Hash51-2.0"
+    "url": "https://github.com/DDR-Greenfield/Hash51-2.0/issues"
   },
   "homepage": "https://github.com/DDR-Greenfield/Hash51-2.0#readme",
   "dependencies": {

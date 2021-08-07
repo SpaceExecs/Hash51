@@ -1,14 +1,12 @@
 /*  eslint-disable func-style, no-console, dot-notation, camelcase, no-alert */
-import React, { createContext, useState, useEffect} from 'react';
+import React, { createContext, useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 
 import axios from 'axios';
 
-
-
 const UserContext = createContext();
 
-function UserContextProvider({ children }){
+function UserContextProvider({ children }) {
   const [userObj, setUserObj] = useState({});
   const [conspirators, setConspirators] = useState([]);
   const [favorites, setFavorites] = useState([]);
@@ -19,6 +17,7 @@ function UserContextProvider({ children }){
   const [confirm, setConfirm] = useState('');
   const [userLogin, setUserLogin] = useState('');
   const [passLogin, setPassLogin] = useState('');
+  const [usersInChat, setUsersInChat] = useState([]);
 
   const handleUserReg = (event) => setUserReg(event.target.value);
   const handlePass = (event) => setPass(event.target.value);
@@ -32,38 +31,38 @@ function UserContextProvider({ children }){
   };
 
   const getEvidence = async () => {
-    if(Object.keys(userObj).length){
-    await axios.get('/get/favorites')
-    .then(({data}) => {
-      setFavorites(data);});
+    if (Object.keys(userObj).length) {
+      await axios.get('/get/favorites')
+        .then(({ data }) => {
+          setFavorites(data);
+        });
     }
   };
 
   const localRegister = async (username, password, confirmation) => {
-    if(username.length && password.length && confirmation.length){
-    if(password === confirmation) {
-      await axios.post('/register', {username, password});
+    if (username.length && password.length && confirmation.length) {
+      if (password === confirmation) {
+        await axios.post('/register', { username, password });
+      } else {
+        alert('passwords do not match');
+      }
     } else {
-      alert('passwords do not match');
+      alert('no field should be empty');
     }
-  } else {
-    alert('no field should be empty');
-  }
   };
 
   const getUser = () => {
-    axios.get('/getUser', { withCredentials: true }).then(res => {
-      if(res.data){
+    axios.get('/getUser', { withCredentials: true }).then((res) => {
+      if (res.data) {
         setUserObj(res.data);
         setIsLoggedIn(true);
       }
-    }
-    );
+    });
   };
 
   const getConspirators = () => {
     axios.get('/get/conspirators')
-    .then(({ data }) => setConspirators(data));
+      .then(({ data }) => setConspirators(data));
   };
 
   const addConspirator = (userName) => {
@@ -73,9 +72,9 @@ function UserContextProvider({ children }){
       conspiratorNames.push(conspirator.username);
     });
 
-    if(!conspiratorNames.includes(userName) && userName !== username) {
+    if (!conspiratorNames.includes(userName) && userName !== username) {
       axios.post('/add/conspirator', { userName })
-      .then(() => getConspirators());
+        .then(() => getConspirators());
     } else {
       getConspirators();
     }
@@ -83,23 +82,26 @@ function UserContextProvider({ children }){
 
   const updateConspirator = (conspirator_id) => {
     const { _id } = userObj;
-    axios.post('/update/conspirators', { conspirator_id, _id})
-    .then(() => {
-      getConspirators();
-    });
+    axios.post('/update/conspirators', { conspirator_id, _id })
+      .then(() => {
+        getConspirators();
+      });
   };
 
   const fetchConspiratorFavorites = (friendId) => {
     axios.post('/conspirator/favorites', { friendId });
   };
 
-  const localLogin = ( username, password ) => {
+  const localLogin = (username, password) => {
     axios.post('/login', { username, password })
-    .then(getUser)
-    .catch((err) => {
-      console.log('login error', err);
-      alert('User Not Found');
-  });
+      .then(() => {
+        getUser();
+        getConspirators();
+      })
+      .catch((err) => {
+        console.log('login error', err);
+        alert('User Not Found');
+      });
   };
 
   const localLogout = () => {
@@ -108,7 +110,7 @@ function UserContextProvider({ children }){
     setFavorites([]);
     setConspirators([]);
     axios.get('/logout')
-    .then(() => console.log('successful logout'));
+      .then(() => console.log('successful logout'));
   };
 
   useEffect(async () => {
@@ -122,6 +124,8 @@ function UserContextProvider({ children }){
     isLoggedIn,
     localRegister,
     localLogin,
+    usersInChat,
+    setUsersInChat,
     localLogout,
     getUser,
     conspirators,
@@ -142,7 +146,7 @@ function UserContextProvider({ children }){
     addConspirator,
     fetchConspiratorFavorites,
     getConspirators,
-    updateConspirator
+    updateConspirator,
   };
 
   return (
@@ -152,9 +156,8 @@ function UserContextProvider({ children }){
   );
 }
 
-
 UserContextProvider.propTypes = {
-  children: PropTypes.element.isRequired
+  children: PropTypes.element.isRequired,
 };
 
 export { UserContext, UserContextProvider };

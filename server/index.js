@@ -11,7 +11,6 @@ const { passportRouter } = require('./routes/passportRoutes');
 const { userRouter } = require('./routes/userRoutes');
 const { PORT } = require('./config');
 
-
 const port = PORT || 3000;
 const distPath = path.resolve(__dirname, '../client/dist');
 const app = express();
@@ -27,8 +26,8 @@ app.use(express.static(distPath));
 app.use(cors({
   origin: '*',
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
-  allowedHeaders: "Content-Type, Authorization",
-  credentials: true
+  allowedHeaders: 'Content-Type, Authorization',
+  credentials: true,
 }));
 
 app.use(session({
@@ -47,28 +46,39 @@ app.get('*', (req, res) => {
   res.sendFile(path.resolve(__dirname, '../client/dist/index.html'));
 });
 
-
+let allUsers = [];
 io.on('connection', (socket) => {
   const socketJoin = () => {
     socket.join();
   };
 
-
   socket.on('userConnected', (userId) => {
-    io.emit('message', {message: `${userId} has joined chat`});
-    socketJoin();});
+    allUsers.push(userId);
+    allUsers = [...new Set(allUsers)];
+    io.emit('message', {
+      message: `${userId} has joined chat` });
+    io.emit('updateUsers', {
+      users: allUsers,
+    });
+    socketJoin();
+  });
 
   socket.on('userDisconnected', (userId) => {
-    io.emit('message', {message: `${userId} has left the chat`});
-    socket.leave();});
+    const toRemove = allUsers.indexOf(userId);
+    allUsers.splice(toRemove, 1);
+    io.emit('message', { message: `${userId} has left the chat` });
+    io.emit('updateUsers', {
+      users: allUsers,
+    });
+    socket.leave();
+  });
   // broadcast to everyone else they disconnected.
   socket.on('disconnect', () => {
   });
 
- socket.on('message', (message) => {
-   io.emit('message', message);
- });
-
+  socket.on('message', (message) => {
+    io.emit('message', message);
+  });
 });
 
 server.listen(port, () => {

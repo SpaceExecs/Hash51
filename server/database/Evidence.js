@@ -8,7 +8,12 @@ const EvidenceSchema = new mongoose.Schema({
   nasaTitle: String,
   userTitle: String,
   keyWords: Array,
-  comments: Array
+  comments: Array,
+  videoTitle: String,
+  videoDescription: String,
+  videoUrl: String,
+  videoThumbnail: String,
+  videoId: String,
 });
 
 const Evidence = mongoose.model('Evidence', EvidenceSchema);

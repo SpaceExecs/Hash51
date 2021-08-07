@@ -1,7 +1,7 @@
 import React from 'react';
 
-import { 
-  Flex
+import {
+  Flex,
 } from '@chakra-ui/react';
 
 import Search from './components/Search';
@@ -13,13 +13,13 @@ const SearchContainer = () => (
       justifyContent="center"
       alignItems="center"
     >
-      <Search/>
+      <Search />
     </Flex>
     <Flex
       justifyContent="center"
       alignItems="center"
     >
-      <SearchResult/>
+      <SearchResult />
     </Flex>
   </div>
 );

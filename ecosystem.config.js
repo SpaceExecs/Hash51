@@ -12,6 +12,7 @@ module.exports = {
       MONGO_PASS: process.env.MONGO_PASS,
       SECRET: process.env.SECRET,
       PORT: process.env.PORT,
+      YOUTUBE_API: process.env.YOUTUBE_API
     }
   },
     {
@@ -24,6 +25,7 @@ module.exports = {
         MONGO_PASS: process.env.MONGO_PASS,
         SECRET: process.env.SECRET,
         PORT: process.env.PORT,
+        YOUTUBE_API: process.env.YOUTUBE_API
       }
   }],
 
@@ -41,6 +43,7 @@ module.exports = {
         MONGO_PASS: process.env.MONGO_PASS,
         SECRET: process.env.SECRET,
         PORT: process.env.PORT,
+        YOUTUBE_API: process.env.YOUTUBE_API
       },
       ssh_options: "StrictHostKeyChecking=no",
       'pre-deploy-local': '',

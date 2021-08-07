@@ -1,5 +1,4 @@
 import React, { useContext } from 'react';
-import PropTypes from 'prop-types';
 
 import {
   Text,
@@ -7,46 +6,74 @@ import {
   Image,
   Flex,
   Heading,
-  Grid, 
-  useColorModeValue
-} from "@chakra-ui/react";
+  useColorModeValue,
+  Button,
+} from '@chakra-ui/react';
 
 import CommentList from './CommentList';
 import { UserContext } from '../../../contexts/UserContext';
-
+import AddFriendPopover from './AddFriendPopover';
+import EditTitleModal from './EditTitleModal';
+import { DisplayContext } from '../../../contexts/DisplayContext';
 
 const Story = (props) => {
   const { story } = props;
   const { userName, nasaTitle, userTitle, href, bodyText, comments, _id } = story;
 
-  const { addConspirator, userObj } = useContext(UserContext);
+  const { addConspirator, userObj, isLoggedIn } = useContext(UserContext);
+  const { deleteStory } = useContext(DisplayContext);
 
-  const textColor = useColorModeValue("green.100", "green.700");
-  const whiteColor = useColorModeValue("whiteAlpha.900" , "blackAlpha.900");
-  const greyColor = useColorModeValue("gray.600" , "gray.300");
-  const redColor = useColorModeValue("red.100" , "red.800");
-  
+  const textColor = useColorModeValue('green.100', 'green.700');
+  const whiteColor = useColorModeValue('whiteAlpha.900', 'blackAlpha.900');
+  const greyColor = useColorModeValue('gray.600', 'gray.300');
+  const redColor = useColorModeValue('red.100', 'red.800');
+
   return (
     <div>
       <Box
         h="59vh"
-        w="60vw" 
-        bg={greyColor} 
-        mb=".5vh" 
+        w="60vw"
+        bg={greyColor}
+        mb=".5vh"
         borderTopRadius={10}
       >
         <Flex>
-          <Image
-            src={href}
-            h="55vh"
-            w="45vw"
-            bg="purple.100"
-            fit="cover"
-            borderTopLeftRadius={10}
-          />
+          {href.slice(0, 8) !== 'http://y' ?
+            (
+              <Image
+                src={href}
+                h="55vh"
+                w="45vw"
+                bg="purple.100"
+                fit="cover"
+                borderTopLeftRadius={10}
+              />
+            ) :
+            (
+              <iframe
+                title="youtubeVideo"
+                src={href}
+                height="480px"
+                width="854px"
+              />
+            )}
           <Box
             w="17vw"
           >
+            <EditTitleModal
+              float="right"
+              _id={_id}
+              userTitle={userTitle}
+              bodyText={bodyText}
+            />
+            <Button
+              variant="ghost"
+              onClick={() => { deleteStory(_id); }}
+              float="right"
+              color="blackAlpha.900"
+            >
+              Burn The Evidence!
+            </Button>
             <Heading
               mt="2vh"
               p={2}
@@ -58,13 +85,13 @@ const Story = (props) => {
                 '&::-webkit-scrollbar': {
                   width: '16px',
                   borderRadius: '8px',
-                  backgroundColor: `rgba(0, 0, 0, 0.05)`,
+                  backgroundColor: 'rgba(0, 0, 0, 0.05)',
                 },
                 '&::-webkit-scrollbar-thumb': {
-                  backgroundColor: `rgba(0, 0, 0, 0.5)`,
+                  backgroundColor: 'rgba(0, 0, 0, 0.5)',
                 },
               }}
-              
+
             >
               {userTitle}
             </Heading>
@@ -80,10 +107,10 @@ const Story = (props) => {
                 '&::-webkit-scrollbar': {
                   width: '16px',
                   borderRadius: '8px',
-                  backgroundColor: `rgba(0, 0, 0, 0.05)`,
+                  backgroundColor: 'rgba(0, 0, 0, 0.05)',
                 },
                 '&::-webkit-scrollbar-thumb': {
-                  backgroundColor: `rgba(0, 0, 0, 0.5)`,
+                  backgroundColor: 'rgba(0, 0, 0, 0.5)',
                 },
               }}
             >
@@ -96,14 +123,24 @@ const Story = (props) => {
                 color={whiteColor}
                 // eslint-disable-next-line consistent-return
                 onClick={() => {
-                  if(userObj.username) {
+                  if (userObj.username) {
                     return addConspirator(userName);
                   }
                 }}
               >
-                Created by {userName}
+
+                Created by
+                {' '}
+                {userName}
               </Text>
             </Text>
+            {isLoggedIn && (
+            <AddFriendPopover
+              addConspirator={addConspirator}
+              userName={userName}
+              userObj={userObj}
+            />
+            )}
           </Box>
         </Flex>
         <Text
@@ -113,16 +150,17 @@ const Story = (props) => {
           color={redColor}
           pt={2}
         >
-          NASA image title: {nasaTitle}
+          {href.slice(0, 8) !== 'http://y' ?
+            ('NASA image title: ') :
+            ('Video title of the truth: ')}
+          {' '}
+          {nasaTitle}
         </Text>
+
       </Box>
-      <CommentList comments={comments} post_id={_id}/>
+      <CommentList comments={comments} post_id={_id} />
     </div>
   );
 };
-
-// Story.propTypes = {
-//   story: PropTypes.objectOf(PropTypes.object).isRequired,
-// };
 
 export default Story;

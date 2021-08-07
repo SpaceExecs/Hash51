@@ -42,7 +42,7 @@ module.exports = {
   devServer: {
     contentBase: distDir,
     compress: true,
-    port: 3000
+    port: 80
   },
   plugins: [
     new HtmlWebpackPlugin({template: path.join(__dirname, 'client/src', 'index.html')})

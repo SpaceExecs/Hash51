@@ -9,17 +9,23 @@ import {
   Flex,
   Textarea,
   Input,
-  Stack
-} from "@chakra-ui/react";
+  Stack,
+} from '@chakra-ui/react';
 
 import { EvidenceContext } from '../../../contexts/EvidenceContext';
 import { UserContext } from '../../../contexts/UserContext';
 
 const PostStory = () => {
-  const { postStory, bodyText, handlePostTitle, handlePostBody, userTitle, nasa_id } = useContext(EvidenceContext);
+  const {
+    postStory,
+    bodyText,
+    handlePostTitle,
+    handlePostBody,
+    userTitle,
+    nasa_id,
+  } = useContext(EvidenceContext);
   const { storeEvidence, userObj } = useContext(UserContext);
   const { username } = userObj;
-
 
   return (
     <Stack>
@@ -54,10 +60,10 @@ const PostStory = () => {
               '&::-webkit-scrollbar': {
                 width: '16px',
                 borderRadius: '8px',
-                backgroundColor: `rgba(0, 0, 0, 0.05)`,
+                backgroundColor: 'rgba(0, 0, 0, 0.05)',
               },
               '&::-webkit-scrollbar-thumb': {
-                backgroundColor: `rgba(0, 0, 0, 0.5)`,
+                backgroundColor: 'rgba(0, 0, 0, 0.5)',
               },
             }}
             value={bodyText}
