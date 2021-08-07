@@ -9,8 +9,6 @@ function DisplayContextProvider({ children }) {
   const [stories, setStories] = useState([]);
   const [commentBody, setCommentBody] = useState('');
 
-
-
   const handleCommentBody = (event) => setCommentBody(event.target.value);
 
   const fetchStories = async () => {
@@ -27,6 +25,12 @@ function DisplayContextProvider({ children }) {
     await axios.post('/routes/story/comment', comment).then(() => setCommentBody('')).then(() => fetchStories());
   };
 
+  const deleteStory = async (postId) => {
+    console.log(postId);
+    await axios.delete(`/routes/storyDelete/${postId}`)
+      .then((data) => data);
+  };
+
   const displayProps = {
     stories,
     setStories,
@@ -35,6 +39,7 @@ function DisplayContextProvider({ children }) {
     handleCommentBody,
     setCommentBody,
     commentBody,
+    deleteStory,
   };
 
   return (

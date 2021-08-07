@@ -167,12 +167,16 @@ serverRouter.put('/story/:evidence_id', (req, res) => {
   });
 });
 
-serverRouter.delete('/story/:evidence_id', (req, res) => {
-  Evidence.deleteOne({ _id: req.params.evidence_id }, (err, evidence) => {
+serverRouter.delete('/storyDelete/:_id', (req, res) => {
+  console.log('hey there');
+  console.log('rec.params: ', req.params);
+  const { _id } = req.params;
+  Evidence.deleteOne({ _id }, (err, evidence) => {
     if (err) {
       return res.send(err);
     }
-    return res.json({ message: 'Evidence was deleted successfully!' });
+    console.log(`${evidence} was deleted successfully`);
+    return res.json({ message: `${evidence} was deleted successfully` });
   });
 });
 
