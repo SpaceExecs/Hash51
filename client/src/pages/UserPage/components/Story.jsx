@@ -1,5 +1,4 @@
 import React, { useContext } from 'react';
-import PropTypes from 'prop-types';
 
 import {
   Text,
@@ -14,6 +13,7 @@ import {
 import CommentList from './CommentList';
 import { UserContext } from '../../../contexts/UserContext';
 import AddFriendPopover from './AddFriendPopover';
+import EditTitleModal from './EditTitleModal';
 import { DisplayContext } from '../../../contexts/DisplayContext';
 
 const Story = (props) => {
@@ -60,6 +60,12 @@ const Story = (props) => {
           <Box
             w="17vw"
           >
+            <EditTitleModal
+              float="right"
+              _id={_id}
+              userTitle={userTitle}
+              bodyText={bodyText}
+            />
             <Heading
               mt="2vh"
               p={2}

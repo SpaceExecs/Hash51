@@ -11,19 +11,21 @@ function DisplayContextProvider({ children }) {
 
   const handleCommentBody = (event) => setCommentBody(event.target.value);
 
-  const fetchStories = async () => {
-    await axios.get('/routes/story')
-      .then((result) => {
-        setStories(result.data.reverse());
-      });
-  };
+  const fetchStories = () => axios.get('/routes/story').then((result) => result.data);
 
   // eslint-disable-next-line camelcase
   const postComment = async (post_id, userObj) => {
     const { username, profileImage } = userObj;
     const comment = { commentBody, post_id, userName: username, profileImage };
-    await axios.post('/routes/story/comment', comment).then(() => setCommentBody('')).then(() => fetchStories());
+    await axios
+      .post('/routes/story/comment', comment)
+      .then(() => setCommentBody(''))
+      .then(() => fetchStories().then((data) => {
+        setStories(data);
+      }));
   };
+
+  const editStory = (_id, newTitle, newDescription) => axios.patch('/routes/storyUpdate', { _id, newTitle, newDescription }).then((data) => console.log(data));
 
   const deleteStory = async (postId) => {
     console.log(postId);
@@ -35,6 +37,7 @@ function DisplayContextProvider({ children }) {
     stories,
     setStories,
     fetchStories,
+    editStory,
     postComment,
     handleCommentBody,
     setCommentBody,
