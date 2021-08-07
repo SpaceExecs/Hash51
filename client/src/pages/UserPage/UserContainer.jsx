@@ -18,12 +18,14 @@ const UserContainer = (props) => {
   const { user } = props;
   const { conspirators } = user;
 
-  const { stories, fetchStories } = useContext(DisplayContext);
+  const { stories, fetchStories, setStories } = useContext(DisplayContext);
   const { userObj, getEvidence, getConspirators, getUser } = useContext(UserContext);
 
   useEffect(() => {
     getUser();
-    fetchStories();
+    fetchStories().then((data) => {
+      setStories(data);
+    });
     getEvidence();
     getConspirators();
   },
