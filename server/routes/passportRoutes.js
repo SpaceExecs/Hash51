@@ -13,7 +13,7 @@ const passportRouter = Router();
 passportRouter.post('/register', (req, res) => {
   const { username, password } = req.body;
   User.register({ username }, password, async (err, user) => {
-    if(err){
+    if (err) {
       console.log(err);
       res.sendStatus(500);
     } else {
@@ -31,15 +31,15 @@ passportRouter.post('/register', (req, res) => {
 passportRouter.post('/login', (req, res) => {
   const { username, password } = req.body;
   const user = new User({ username, password });
-  req.login(user, err => {
-    if(err){
+  req.login(user, (err) => {
+    if (err) {
       console.log(err);
       res.sendStatus(500);
     } else {
       passport.authenticate('local')(req, res, (error, result) => {
         res.status(200).send(req.user);
-    });
-  }
+      });
+    }
   });
 });
 
@@ -51,14 +51,14 @@ passportRouter.get('/logout', (req, res) => {
 
 // Google Strategy //
 passportRouter.get('/auth/google',
-passport.authenticate('google', { scope: ['profile', 'email'] }),
-(req, res) => res.status(200).send(req.user));
+  passport.authenticate('google', { scope: ['profile', 'email'] }),
+  (req, res) => res.status(200).send(req.user));
 
 passportRouter.get('/auth/google/login',
-passport.authenticate('google', { failureRedirect: 'http://localhost:3000/error' }),
-(req, res) => {
-  res.redirect('/');
-});
+  passport.authenticate('google', { failureRedirect: 'http://localhost:3000/error' }),
+  (req, res) => {
+    res.redirect('/');
+  });
 
 passportRouter.get('/getUser', (req, res) => {
   res.send(req.user);

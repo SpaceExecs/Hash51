@@ -1,5 +1,4 @@
 import React, { useContext } from 'react';
-import PropTypes from 'prop-types';
 
 import {
   Text,
@@ -8,18 +7,21 @@ import {
   Flex,
   Heading,
   useColorModeValue,
+  Button,
 } from '@chakra-ui/react';
 
 import CommentList from './CommentList';
 import { UserContext } from '../../../contexts/UserContext';
 import AddFriendPopover from './AddFriendPopover';
 import EditTitleModal from './EditTitleModal';
+import { DisplayContext } from '../../../contexts/DisplayContext';
 
 const Story = (props) => {
   const { story } = props;
   const { userName, nasaTitle, userTitle, href, bodyText, comments, _id } = story;
 
   const { addConspirator, userObj, isLoggedIn } = useContext(UserContext);
+  const { deleteStory } = useContext(DisplayContext);
 
   const textColor = useColorModeValue('green.100', 'green.700');
   const whiteColor = useColorModeValue('whiteAlpha.900', 'blackAlpha.900');
@@ -146,6 +148,13 @@ const Story = (props) => {
           {' '}
           {nasaTitle}
         </Text>
+        <Button
+          onClick={() => { deleteStory(_id); }}
+          float="right"
+          color="blackAlpha.900"
+        >
+          Burn The Evidence!
+        </Button>
       </Box>
       <CommentList comments={comments} post_id={_id} />
     </div>

@@ -27,6 +27,12 @@ function DisplayContextProvider({ children }) {
 
   const editStory = (_id, newTitle, newDescription) => axios.patch('/routes/storyUpdate', { _id, newTitle, newDescription }).then((data) => console.log(data));
 
+  const deleteStory = async (postId) => {
+    console.log(postId);
+    await axios.delete(`/routes/storyDelete/${postId}`)
+      .then((data) => data);
+  };
+
   const displayProps = {
     stories,
     setStories,
@@ -36,6 +42,7 @@ function DisplayContextProvider({ children }) {
     handleCommentBody,
     setCommentBody,
     commentBody,
+    deleteStory,
   };
 
   return (
