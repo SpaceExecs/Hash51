@@ -15,7 +15,7 @@ import { UserContext } from '../../../contexts/UserContext';
 const PostComment = (props) => {
   // eslint-disable-next-line camelcase
   const { post_id } = props;
-  const { fetchStories, handleCommentBody, postComment, commentBody } = useContext(DisplayContext);
+  const { fetchStories, handleCommentBody, postComment, commentBody, setStories } = useContext(DisplayContext);
   const { userObj } = useContext(UserContext);
 
   return (
@@ -53,7 +53,7 @@ const PostComment = (props) => {
         borderLeftRadius={0} 
         onClick={() => {
           postComment(post_id, userObj);
-          fetchStories();
+          fetchStories().then((data) => {setStories(data);});
         }}
       >
         Post

@@ -1,10 +1,12 @@
+/* eslint-disable arrow-body-style */
 /* eslint-disable no-underscore-dangle */
-import React, { useContext, useEffect } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 
 import {
   Flex,
-  Box
+  Box,
+  Select
 } from "@chakra-ui/react";
 
 import { DisplayContext } from '../../contexts/DisplayContext';
@@ -18,17 +20,53 @@ const UserContainer = props => {
   const { user } = props;
   const { conspirators } = user;
 
-  const { stories, fetchStories } = useContext(DisplayContext);
+  const { stories, fetchStories, setStories } = useContext(DisplayContext);
   const { userObj, getEvidence, getConspirators, getUser } = useContext(UserContext);
+
+  const [sorted, setSorted] = React.useState('Default');
+  const [list, setList] = React.useState('');
+
+
+  const sort = (storyToSort) => {
+    let returnArr = [];
+    if(sorted === 'comments'){
+      returnArr = storyToSort.sort((a, b) => {
+        return b.comments.length - a.comments.length;
+      });
+    }else if(sorted === 'alphabetical'){
+      returnArr = storyToSort.sort((a, b) => {
+        return a.userTitle.localeCompare(b.userTitle);
+      });
+    }else if(sorted === 'reverseAlphabetical'){
+      returnArr = storyToSort.sort((a, b) => {
+        return b.userTitle.localeCompare(a.userTitle);
+      });
+    }else{
+      returnArr = storyToSort;
+    }
+    fetchStories().then((data) => {setStories(data);});
+    // return returnArr;
+    return returnArr.map((story) => (<Story key={story._id} story={story} />));
+  };
+  
+  // const list = stories.map((story) => (<Story key={story._id} story={story} />));
+
+  // const _list = (_stories) => {
+  //   return _stories.map((story) => (<Story key={story._id} story={story} />));
+  // };
 
   useEffect(() => {
     getUser();
-    fetchStories();
+    sort(stories);
     getEvidence();
     getConspirators();},
-    [JSON.stringify(userObj)]
+    [JSON.stringify(userObj), sorted]
   );
 
+
+
+  
+  
   return (
     <div>
       <Flex color="white">
@@ -59,8 +97,15 @@ const UserContainer = props => {
             },
           }}
         >
+          <Select placeholder="Sort by:" value={sorted} onChange={(e) => {setSorted(e.target.value);}}>
+            <option value="comments" >Comments</option>
+            <option value="alphabetical" >Title A-Z </option>
+            <option value="reverseAlphabetical">Title Z-A</option>
+          </Select>
 
-          {stories.map((story) => (<Story key={story._id} story={story}/>))}
+
+          {/* {_list(stories)} */}
+          {sort(stories)}
 
         </Box>
       </Flex>
@@ -74,3 +119,4 @@ UserContainer.propTypes = {
 };
 
 export default UserContainer;
+
