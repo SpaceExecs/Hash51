@@ -66,6 +66,14 @@ const Story = (props) => {
               userTitle={userTitle}
               bodyText={bodyText}
             />
+            <Button
+              variant="ghost"
+              onClick={() => { deleteStory(_id); }}
+              float="right"
+              color="blackAlpha.900"
+            >
+              Burn The Evidence!
+            </Button>
             <Heading
               mt="2vh"
               p={2}
@@ -148,13 +156,7 @@ const Story = (props) => {
           {' '}
           {nasaTitle}
         </Text>
-        <Button
-          onClick={() => { deleteStory(_id); }}
-          float="right"
-          color="blackAlpha.900"
-        >
-          Burn The Evidence!
-        </Button>
+
       </Box>
       <CommentList comments={comments} post_id={_id} />
     </div>
